@@ -4,6 +4,10 @@ const path = require("path");
 const app = express();
 const PORT = process.env.PORT || 3500;
 
+const logger = require("./middleware/logger");
+
+app.use(logger);
+
 app.use("/", express.static(path.join(__dirname, "/public"))); //Adds the path to make it accessible
 app.use("/", require("./routes/root"));
 
