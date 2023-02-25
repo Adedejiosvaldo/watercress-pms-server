@@ -1,13 +1,24 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const mongoose = require("mongoose");
+
+const { logger, logEvents } = require("./middleware/logger");
+const errorHandler = require("./middleware/errorHandler");
+const connectDB = require("./config/dbConn");
 
 const app = express();
 const PORT = process.env.PORT || 3500;
 
-const logger = require("./middleware/logger");
-
+connectDB();
 app.use(logger);
+app.use(errorHandler);
+app.use(cookieParser());
+app.use(cors());
 
+console.log(process.env.NODE_ENV);
 app.use("/", express.static(path.join(__dirname, "/public"))); //Adds the path to make it accessible
 app.use("/", require("./routes/root"));
 
@@ -21,6 +32,17 @@ app.all("*", (req, res) => {
     res.type("text").send("404:Page Not Found");
   }
 });
-app.listen(PORT, () => {
-  console.log(`Running On ${PORT}`);
+
+mongoose.connection.once("open", () => {
+  console.log("Connected To Db");
+  app.listen(PORT, () => {
+    console.log(`Running On ${PORT}`);
+  });
+});
+mongoose.connection.on("error", (err) => {
+  console.log(err);
+  logEvents(
+    `${err.no}:${err.code}\t${err.syscall}\t${err.hostname}`,
+    "mangoErrLog.log"
+  );
 });
