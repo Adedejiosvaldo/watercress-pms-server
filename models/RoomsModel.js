@@ -28,6 +28,7 @@ const roomSchema = mongoose.Schema({
   role: {
     type: mongoose.Types.ObjectId,
     required: true,
-    ref: User,
+    ref: "User",
   },
 });
+module.exports = mongoose.model("Rooms", roomSchema);

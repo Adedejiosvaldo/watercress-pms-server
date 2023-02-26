@@ -5,9 +5,9 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  LastName: {
+  lastName: {
     type: String,
-    required: true,
+    // required: true,
   },
   email: {
     type: String,
@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  role: [
+  roles: [
     {
       type: String,
       default: "frontOffice",

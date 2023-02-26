@@ -14,13 +14,16 @@ const PORT = process.env.PORT || 3500;
 
 connectDB();
 app.use(logger);
-app.use(errorHandler);
+app.use(express.json());
+// app.use(errorHandler);
 app.use(cookieParser());
 app.use(cors());
 
 console.log(process.env.NODE_ENV);
 app.use("/", express.static(path.join(__dirname, "/public"))); //Adds the path to make it accessible
 app.use("/", require("./routes/root"));
+
+app.use("/users", require("./routes/userRoutes"));
 
 app.all("*", (req, res) => {
   res.status(404);
