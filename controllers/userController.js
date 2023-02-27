@@ -1,15 +1,14 @@
 const Users = require("../models/userModel");
-const Rooms = require("../models/RoomsModel");
-const BookedRooms = require("../models/BookedRooms");
+// const Rooms = require("../models/RoomsModel");
+// const BookedRooms = require("../models/BookedRooms");
 const asyncHandler = require("express-async-handler");
 const bcrypt = require("bcrypt");
-const userModel = require("../models/userModel");
 
 //desc: Get all staff
 //Method:Get
 //Access:Private
 const getAllUsers = asyncHandler(async (req, res) => {
-  const user = await userModel.find().select("-password").lean();
+  const user = await Users.find().select("-password").lean();
   if (!user?.length) {
     return res.status(400).json({ message: "No User Found" });
   }

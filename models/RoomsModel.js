@@ -14,10 +14,12 @@ const roomSchema = mongoose.Schema({
     type: Number,
     required: true,
   },
-  roomType: {
-    type: String,
-    required: true,
-  },
+  roomType: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
   roomProperties: [
     {
       type: String,
@@ -27,7 +29,7 @@ const roomSchema = mongoose.Schema({
 
   role: {
     type: mongoose.Types.ObjectId,
-    required: true,
+
     ref: "User",
   },
 });

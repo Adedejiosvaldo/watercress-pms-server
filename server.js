@@ -24,6 +24,7 @@ app.use("/", express.static(path.join(__dirname, "/public"))); //Adds the path t
 app.use("/", require("./routes/root"));
 
 app.use("/users", require("./routes/userRoutes"));
+app.use("/rooms", require("./routes/roomRoutes"));
 
 app.all("*", (req, res) => {
   res.status(404);
