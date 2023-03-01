@@ -19,7 +19,6 @@ const roomSchema = mongoose.Schema({
 
   role: {
     type: mongoose.Types.ObjectId,
-
     ref: "User",
   },
 });

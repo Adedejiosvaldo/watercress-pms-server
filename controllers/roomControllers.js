@@ -36,7 +36,6 @@ const createARoom = asyncHandler(async (req, res) => {
   const roomObject = {
     roomNumber,
     roomType,
-    role,
     roomProperties,
   };
 
@@ -49,7 +48,7 @@ const createARoom = asyncHandler(async (req, res) => {
 //Method: PATCH
 //Access: Admin
 const updateRoom = asyncHandler(async (req, res) => {
-  const { id, roomNumber, roomType, roomProperties, roles } = req.body;
+  const { id, roomNumber, roomType, roomProperties, role } = req.body;
 
   //Confirm data
   if (
@@ -57,7 +56,7 @@ const updateRoom = asyncHandler(async (req, res) => {
     !roomNumber ||
     !roomType ||
     !roomProperties ||
-    !Array.isArray(roles)
+    !Array.isArray(role)
   ) {
     return res.status(400).json({ message: "Fields Are Required" });
   }
@@ -67,15 +66,16 @@ const updateRoom = asyncHandler(async (req, res) => {
 
   //when no room is found
   if (!room) {
-    return res.status(400).json({ message: "No user Found" });
+    return res.status(400).json({ message: "No Rooms Found" });
   }
 
   //check for duplicate
   const duplicate = await Rooms.findOne({ roomNumber }).lean().exec();
 
+  //   const stringify = await ;
   //allows update to only original user
-  if (duplicate && duplicate?._id !== id) {
-    return res.status(409).json({ message: "Duplicate Found" });
+  if (duplicate && duplicate?._id.toString() !== id) {
+    return res.status(409).json({ message: "Duplicate roomNumber" });
   }
 
   //updates the data
@@ -84,11 +84,11 @@ const updateRoom = asyncHandler(async (req, res) => {
   room.roomProperties = roomProperties;
 
   //saves the Updated data
-  const updatedRooms = room.save();
+  const updatedRooms = await room.save();
 
   //response to the request
   res.json({
-    message: `Information: ${updatedRooms.roomNumber} data has been changed`,
+    message: `Information:Room ${roomNumber} data has been changed`,
   });
 });
 
@@ -96,18 +96,18 @@ const updateRoom = asyncHandler(async (req, res) => {
 //Method: Delete
 //Access: Admin
 const deleteRoom = asyncHandler(async (req, res) => {
-  const { id } = req.body;
+  const { _id } = req.body;
 
   //Find UserRoles
   const userRoles = await Users.findOne({ role: id }).lean().exec();
 
   //check if user us admin
-  if (userRoles === "admin") {
+  if (userRoles.toString() === "admin") {
     return res.status(400).json({ message: "User is admin" });
   }
 
   //find Room
-  const room = await Rooms.findById(id).exec();
+  const room = await Rooms.findById(_id).exec();
 
   //No room matches ID
   if (!room) {
@@ -118,7 +118,7 @@ const deleteRoom = asyncHandler(async (req, res) => {
   const result = await Rooms.deleteOne(room);
 
   //response to server
-  res.json({ message: `${result.roomNumber} deleted successfully` });
+  res.json({ message: `${room.roomNumber} deleted successfully` });
 });
 
 module.exports = { createARoom, updateRoom, getAllRooms, deleteRoom };
