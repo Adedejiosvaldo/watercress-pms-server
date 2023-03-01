@@ -17,4 +17,4 @@ const restaurantModel = mongoose.Schema({
   },
 });
 
-module.exports = restaurantModel;
+module.exports = mongoose.model("Restaurant", restaurantModel);
