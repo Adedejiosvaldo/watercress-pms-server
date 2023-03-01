@@ -24,7 +24,7 @@ app.use("/", require("./routes/root"));
 
 app.use("/users", require("./routes/userRoutes"));
 app.use("/rooms", require("./routes/roomRoutes"));
-app.use("restaurant", require("./routes/resturantRoute"));
+app.use("/restaurant", require("./routes/resturantRoute"));
 
 app.all("*", (req, res) => {
   res.status(404);
