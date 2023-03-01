@@ -1,20 +1,24 @@
-const mongoose = require("mongoose");
+const AsyncHandler = require("express-async-handler");
+const restaurantModel = require("../models/Resturant");
 
-const restaurantModel = mongoose.Schema({
-  orderedItem: {
-    type: String,
-    required: true,
-  },
-  quantityOrdered: {
-    type: Number,
-    required: true,
-    default: 1,
-  },
-  price: {
-    type: Number,
-    required: true,
-    default: 1000,
-  },
-});
+//Description : Get All Orders
+//Method: GET
+//Access: Staff
+const getAllOrders = AsyncHandler(async (req, res) => {});
 
-module.exports = restaurantModel;
+//Description : Create an Order
+//Method: POST
+//Access: Staff
+const createAnOrder = AsyncHandler(async (req, res) => {});
+
+//Description : Update an Order
+//Method: PATCH
+//Access: Staff
+const updateAnOrder = AsyncHandler(async (req, res) => {});
+
+//Description : Get All Orders
+//Method: GET
+//Access: Staff
+const cancelAnOrder = AsyncHandler(async (req, res) => {});
+
+module.exports = { createAnOrder, getAllOrders, updateOrder, cancelAnOrder };
