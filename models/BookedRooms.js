@@ -21,3 +21,5 @@ const bookedSchema = mongoose.Schema({
     },
   ],
 });
+
+module.exports = mongoose.model("BookedRoom", bookedSchema);
