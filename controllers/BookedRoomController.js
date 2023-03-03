@@ -26,18 +26,14 @@ const bookAGuest = asyncHandler(async (req, res) => {
     .select("roomNumber -_id")
     .exec();
 
-  if (!checkInDate || !checkOutDate || Array.isArray(status)) {
+  if (!checkInDate || !checkOutDate || !Array.isArray(status)) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-  status.map((room) => {
-    if (
-      room.toString().toLowerCase !== "empty".toLowerCase() ||
-      room.toString().toLowerCase !== "Out Of Order".toLowerCase()
-    ) {
-      return res.status(409).json({ message: "Room Is Already Occupied" });
-    }
-  });
+  const roomStatus = status.find((element) => element === "empty");
+  if (!roomStatus) {
+    return res.status(409).json({ message: "Room Is Already Occupied" });
+  }
 
   const bookedRoom = {
     getRoomNumber,
@@ -47,7 +43,7 @@ const bookAGuest = asyncHandler(async (req, res) => {
   };
 
   const newBooking = BookedRooms.create(bookedRoom);
-  res.json({ message: `Successfully booked ${getRoomNumber}` });
+  res.json({ message: `Successfully booked Room ${getRoomNumber.roomNumber}` });
 });
 
 //Description:update a guest details
